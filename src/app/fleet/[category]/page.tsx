@@ -68,7 +68,7 @@ export default function CategoryFleetCatalog({ params }: { params: { category: s
                             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white">
                                 <HardHat className="h-6 w-6" />
                             </div>
-                            <span className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white uppercase">Heavy<span className="text-primary">Rent</span></span>
+                            <span className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white uppercase">Prime Construction <span className="text-primary">Machines</span></span>
                         </Link>
                         <nav className="hidden md:flex items-center gap-8">
                             <Link className="text-sm font-semibold hover:text-primary transition-colors" href="/">Home</Link>
@@ -244,7 +244,7 @@ export default function CategoryFleetCatalog({ params }: { params: { category: s
                             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
                                 <HardHat className="h-4 w-4" />
                             </div>
-                            <span className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white uppercase">Heavy<span className="text-primary">Rent</span></span>
+                            <span className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white uppercase">Prime Construction <span className="text-primary">Machines</span></span>
                         </div>
                         <div className="flex gap-8 text-sm font-medium text-slate-500">
                             <a className="hover:text-primary" href="#">Privacy Policy</a>
@@ -252,7 +252,7 @@ export default function CategoryFleetCatalog({ params }: { params: { category: s
                             <a className="hover:text-primary" href="#">Help Center</a>
                         </div>
                         <p className="text-sm text-slate-500">
-                            &copy; 2024 HeavyRent Industrial Services. All rights reserved.
+                            &copy; 2024 Prime Construction Machines. All rights reserved.
                         </p>
                     </div>
                 </div>

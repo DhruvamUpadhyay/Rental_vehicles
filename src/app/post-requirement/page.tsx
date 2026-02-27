@@ -24,7 +24,7 @@ export default function PostRequirement() {
                         <Link href="/" className="flex items-center gap-3">
                             <HardHat className="text-primary h-8 w-8" />
                             <span className="text-xl font-black tracking-tighter text-slate-900 dark:text-white uppercase italic">
-                                HEAVY<span className="text-primary">RENT</span>
+                                PRIME CONSTRUCTION <span className="text-primary">MACHINES</span>
                             </span>
                         </Link>
 

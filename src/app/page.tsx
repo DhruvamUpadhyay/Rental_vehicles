@@ -1,3 +1,6 @@
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   HardHat, Search, MapPin, ArrowRight, ShieldCheck, Headset, CreditCard,
@@ -6,6 +9,18 @@ import {
 } from "lucide-react";
 
 export default function Home() {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [pincodeQuery, setPincodeQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchQuery) params.set("q", searchQuery);
+    if (pincodeQuery) params.set("loc", pincodeQuery);
+    router.push(`/fleet?${params.toString()}`);
+  };
+
   return (
     <div className="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
       {/* Sticky Navigation */}
@@ -15,7 +30,7 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <HardHat className="text-primary h-8 w-8" />
               <h1 className="text-white text-2xl font-black tracking-tighter uppercase italic">
-                Heavy<span className="text-primary">Rent</span>
+                Prime Construction <span className="text-primary">Machines</span>
               </h1>
             </div>
             <nav className="hidden lg:flex items-center gap-6">
@@ -57,19 +72,21 @@ export default function Home() {
           </video>
         </div>
         <div className="relative z-20 container mx-auto px-4 flex flex-col items-center text-center">
-          <h1 className="text-white text-3xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tighter mb-4 max-w-4xl uppercase italic">
+          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.2] md:leading-[1.1] tracking-tighter mb-4 max-w-4xl uppercase italic">
             Rent Heavy Construction <span className="text-primary">Equipment</span> Instantly
           </h1>
-          <p className="text-white/80 text-base md:text-lg font-medium mb-10 max-w-2xl leading-relaxed">
-            Find JCBs, Cranes, and Dumpers near your pin code. Verified machines, zero hassle brokerage.
+          <p className="text-white/80 text-sm md:text-lg font-medium mb-8 md:mb-10 max-w-2xl leading-relaxed">
+            Find JCBs, Cranes, and Dumpers near your pin code. Verified machines.
           </p>
 
           {/* Search Bar Overlay */}
           <div className="w-full max-w-4xl bg-slate-900/90 backdrop-blur-2xl p-3 rounded-2xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.6)] border border-white/10">
-            <div className="flex flex-col md:flex-row gap-2">
+            <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-2">
               <div className="flex-[1.5] relative group">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary h-5 w-5" />
                 <input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-white/5 border-white/10 text-white pl-12 h-14 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-white/30 text-sm font-bold uppercase italic"
                   placeholder="Search Equipment..."
                   type="text"
@@ -78,16 +95,18 @@ export default function Home() {
               <div className="flex-1 relative group">
                 <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-primary h-5 w-5" />
                 <input
+                  value={pincodeQuery}
+                  onChange={(e) => setPincodeQuery(e.target.value)}
                   className="w-full bg-white/5 border-white/10 text-white pl-12 h-14 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-white/30 text-sm font-bold uppercase italic"
                   placeholder="Pin Code"
                   type="text"
                 />
               </div>
-              <Link href="/fleet" className="bg-primary hover:bg-orange-600 text-white px-8 h-14 rounded-xl font-black uppercase italic text-sm tracking-tight transition-all shadow-xl flex items-center justify-center gap-2">
+              <button type="submit" className="bg-primary hover:bg-orange-600 text-white px-8 h-14 rounded-xl font-black uppercase italic text-sm tracking-tight transition-all shadow-xl flex items-center justify-center gap-2">
                 Find Fleet
                 <ArrowRight className="h-5 w-5" />
-              </Link>
-            </div>
+              </button>
+            </form>
           </div>
 
           <div className="mt-12 flex flex-wrap justify-center items-center gap-8 text-white/40 uppercase text-[10px] font-bold tracking-[0.3em]">
@@ -111,8 +130,8 @@ export default function Home() {
               <ShieldCheck className="text-primary h-8 w-8" />
             </div>
             <div>
-              <h4 className="text-white font-black uppercase text-2xl tracking-tight italic">Verified</h4>
-              <p className="text-primary text-sm font-bold uppercase tracking-widest mt-0.5">Strategic Vendors</p>
+              <h4 className="text-white font-black uppercase text-xl md:text-2xl tracking-tight italic">Verified</h4>
+              <p className="text-primary text-xs md:text-sm font-bold uppercase tracking-widest mt-0.5">Strategic Vendors</p>
             </div>
           </div>
         </div>
@@ -124,7 +143,7 @@ export default function Home() {
           <div className="flex items-end justify-between mb-16 border-l-4 border-primary pl-6">
             <div>
               <h3 className="text-primary font-bold uppercase tracking-widest text-sm mb-2">Inventory</h3>
-              <h2 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter">Browse by <span className="text-primary">Category</span></h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-6 uppercase tracking-tighter text-slate-900 dark:text-white italic">Browse by <span className="text-primary">Category</span></h2>
             </div>
             <Link className="group flex items-center gap-2 text-slate-500 dark:text-slate-400 font-bold uppercase text-xs tracking-widest hover:text-primary transition-colors" href="/fleet">
               View All Categories
@@ -145,8 +164,8 @@ export default function Home() {
                   <div className="w-16 h-16 bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white text-slate-700 dark:text-slate-300 transition-colors">
                     {cat.icon}
                   </div>
-                  <h4 className="text-lg font-black uppercase tracking-tight mb-2">{cat.title}</h4>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wide">{cat.desc}</p>
+                  <h4 className="text-base md:text-lg font-black uppercase tracking-tight mb-2">{cat.title}</h4>
+                  <p className="text-slate-500 dark:text-slate-400 text-[10px] md:text-xs font-medium uppercase tracking-wide">{cat.desc}</p>
                 </div>
               </Link>
             ))}
@@ -159,7 +178,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="mb-16 text-center">
             <h3 className="text-secondary font-bold uppercase tracking-widest text-sm mb-2">Our Expertise</h3>
-            <h2 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter">Industries We <span className="text-primary">Serve</span></h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tighter">Industries We <span className="text-primary">Serve</span></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {[
@@ -176,7 +195,7 @@ export default function Home() {
                 <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-slate-900/90 to-transparent z-10 pointer-events-none"></div>
                 <div className="absolute bottom-6 left-6 z-20">
                   {ind.icon}
-                  <h4 className="text-lg font-black uppercase italic">{ind.title}</h4>
+                  <h4 className="text-base sm:text-lg font-black uppercase italic">{ind.title}</h4>
                 </div>
               </div>
             ))}
@@ -188,7 +207,7 @@ export default function Home() {
       < section className="py-24 bg-slate-100 dark:bg-white/[0.02]" >
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter mb-4">Featured <span className="text-primary">Equipment</span></h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tighter mb-4">Featured <span className="text-primary">Equipment</span></h2>
             <p className="text-slate-500 dark:text-slate-400 text-xs font-bold tracking-[0.2em] uppercase">Ready for immediate deployment</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -212,11 +231,11 @@ export default function Home() {
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-xl font-black uppercase tracking-tight mb-1"><Link href={`/equipment/${machine.id}`}>{machine.name}</Link></h3>
+                      <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight mb-1"><Link href={`/equipment/${machine.id}`}>{machine.name}</Link></h3>
                       <p className="text-slate-500 text-xs font-bold uppercase tracking-wide">{machine.type}</p>
                     </div>
                     <div className="text-right">
-                      <span className="text-primary font-black text-xl italic">{machine.price}</span>
+                      <span className="text-primary font-black text-lg sm:text-xl italic">{machine.price}</span>
                       <p className="text-slate-500 text-[10px] font-bold uppercase">Starting / Day</p>
                     </div>
                   </div>
@@ -305,7 +324,7 @@ export default function Home() {
             <div className="col-span-1 md:col-span-1">
               <Link href="/" className="flex items-center gap-3 text-primary mb-6 group inline-flex">
                 <HardHat className="h-8 w-8 group-hover:-rotate-12 transition-transform" />
-                <h2 className="text-xl font-black uppercase tracking-tight italic text-slate-900 dark:text-white">Heavy<span className="text-primary">Rent</span></h2>
+                <h2 className="text-xl font-black uppercase tracking-tight italic text-slate-900 dark:text-white">Prime Construction <span className="text-primary">Machines</span></h2>
               </Link>
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 font-medium">
                 The world&apos;s most trusted digital marketplace for high-end construction machinery and heavy equipment logistics.
@@ -347,7 +366,7 @@ export default function Home() {
             </div>
           </div>
           <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-white/20 text-[10px] font-bold uppercase tracking-[0.2em]">&copy; 2024 HEAVYRENT INDUSTRIAL LOGISTICS SOLUTIONS. ALL RIGHTS RESERVED.</p>
+            <p className="text-white/20 text-[10px] font-bold uppercase tracking-[0.2em]">&copy; 2024 PRIME CONSTRUCTION MACHINES. ALL RIGHTS RESERVED.</p>
             <div className="flex gap-8">
               <Link className="text-white/20 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest" href="#">Privacy Policy</Link>
               <Link className="text-white/20 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest" href="#">Terms of Service</Link>

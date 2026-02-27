@@ -8,7 +8,7 @@ export default function PartnerProgram() {
             <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 md:px-20 py-4 bg-background-light dark:bg-background-dark sticky top-0 z-50">
                 <Link href="/" className="flex items-center gap-3 text-primary">
                     <HardHat className="h-8 w-8 text-primary" />
-                    <h2 className="text-xl font-black leading-tight tracking-tight uppercase italic text-slate-900 dark:text-white">Heavy<span className="text-primary">Rent</span></h2>
+                    <h2 className="text-xl font-black leading-tight tracking-tight uppercase italic text-slate-900 dark:text-white">Prime Construction <span className="text-primary">Machines</span></h2>
                 </Link>
                 <div className="hidden md:flex flex-1 justify-end gap-10">
                     <nav className="flex items-center gap-8">
@@ -35,7 +35,7 @@ export default function PartnerProgram() {
                         <div className="flex-1 space-y-6">
                             <span className="inline-block px-3 py-1 rounded bg-primary/20 text-primary text-xs font-bold uppercase tracking-widest">Vendor Program</span>
                             <h1 className="text-white text-4xl md:text-6xl font-black leading-tight tracking-tight uppercase italic">
-                                Partner with HeavyRent and Grow Your Rental Business.
+                                Partner with Prime Construction Machines and Grow Your Rental Business.
                             </h1>
                             <p className="text-slate-300 text-lg md:text-xl max-w-2xl font-medium leading-relaxed">
                                 List your machines and get high-quality leads from verified contractors. We handle the brokerage, you provide the power.
@@ -200,7 +200,7 @@ export default function PartnerProgram() {
                         <div className="flex flex-col sm:flex-row justify-center gap-4">
                             <Link className="flex items-center justify-center gap-3 px-8 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:border-primary hover:text-primary transition-colors shadow-sm" href="#">
                                 <Mail className="h-5 w-5" />
-                                partners@heavyrent.com
+                                partners@primeconstruction.com
                             </Link>
                             <Link className="flex items-center justify-center gap-3 px-8 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:border-primary hover:text-primary transition-colors shadow-sm" href="#">
                                 <Phone className="h-5 w-5" />
@@ -213,7 +213,7 @@ export default function PartnerProgram() {
 
             {/* Footer Placeholder matching other pages */}
             <footer className="w-full bg-slate-950 text-white pt-20 pb-10 border-t border-primary/20 text-center">
-                <p className="text-xs font-bold uppercase tracking-widest text-slate-500">&copy; 2024 HeavyRent Industrial Solutions. All rights reserved.</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-slate-500">&copy; 2024 Prime Construction Machines. All rights reserved.</p>
             </footer>
         </div>
     );

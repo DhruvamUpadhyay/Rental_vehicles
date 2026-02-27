@@ -8,7 +8,7 @@ export default function About() {
             <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 md:px-20 py-4 bg-background-light dark:bg-background-dark sticky top-0 z-50">
                 <Link href="/" className="flex items-center gap-3 text-primary">
                     <HardHat className="h-8 w-8 text-primary" />
-                    <h2 className="text-xl font-black leading-tight tracking-tight uppercase italic text-slate-900 dark:text-white">Heavy<span className="text-primary">Rent</span></h2>
+                    <h2 className="text-xl font-black leading-tight tracking-tight uppercase italic text-slate-900 dark:text-white">Prime Construction <span className="text-primary">Machines</span></h2>
                 </Link>
                 <div className="hidden md:flex flex-1 justify-end gap-10">
                     <nav className="flex items-center gap-8">
@@ -55,7 +55,7 @@ export default function About() {
                         </div>
                         <h2 className="text-4xl md:text-5xl font-black leading-tight tracking-tight uppercase italic text-slate-900 dark:text-white">Streamlining the <span className="text-primary underline decoration-primary/30 underline-offset-8">Industrial Market</span></h2>
                         <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed font-medium">
-                            HeavyRent was founded on a single premise: industrial infrastructure should never wait for equipment. We are committed to redefining reliability through uncompromising safety, massive scale, and a digital-first approach to logistical efficiency.
+                            Prime Construction Machines was founded on a single premise: industrial infrastructure should never wait for equipment. We are committed to redefining reliability through uncompromising safety, massive scale, and a digital-first approach to logistical efficiency.
                         </p>
                     </div>
                     <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
@@ -215,7 +215,7 @@ export default function About() {
 
                         <div className="relative z-10 max-w-2xl mx-auto">
                             <h2 className="text-3xl md:text-5xl font-black text-white mb-6 uppercase italic tracking-tight">Ready to Scale Your <span className="text-primary">Operations</span>?</h2>
-                            <p className="text-slate-400 text-lg mb-10 font-medium">Experience the HeavyRent difference with our 30-minute response commitment and enterprise-grade fleet.</p>
+                            <p className="text-slate-400 text-lg mb-10 font-medium">Experience the Prime Construction Machines difference with our 30-minute response commitment and enterprise-grade fleet.</p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <button className="bg-primary hover:bg-orange-600 text-white px-10 py-5 rounded-xl font-black uppercase tracking-widest transition-all shadow-xl shadow-primary/20 hover:-translate-y-1">Start Your Quote</button>
                                 <button className="bg-white/5 border border-white/20 hover:bg-white/10 text-white px-10 py-5 rounded-xl font-black uppercase tracking-widest transition-all hover:-translate-y-1">Contact Logistics</button>
@@ -232,7 +232,7 @@ export default function About() {
                         <div className="col-span-1 md:col-span-1">
                             <Link href="/" className="flex items-center gap-3 text-primary mb-6 group">
                                 <HardHat className="h-8 w-8 group-hover:-rotate-12 transition-transform" />
-                                <h2 className="text-xl font-black uppercase tracking-tight italic text-white">Heavy<span className="text-primary">Rent</span></h2>
+                                <h2 className="text-xl font-black uppercase tracking-tight italic text-white">Prime Construction <span className="text-primary">Machines</span></h2>
                             </Link>
                             <p className="text-slate-400 text-sm leading-relaxed mb-6 font-medium">
                                 The premier choice for industrial equipment rentals. Scalable solutions for global infrastructure.
@@ -276,7 +276,7 @@ export default function About() {
                     </div>
 
                     <div className="pt-8 border-t border-slate-900/50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500 font-bold uppercase tracking-widest">
-                        <p>&copy; 2024 HeavyRent Industrial Solutions. All rights reserved.</p>
+                        <p>&copy; 2024 Prime Construction Machines. All rights reserved.</p>
                         <div className="flex gap-8">
                             <Link className="hover:text-white transition-colors" href="#">Privacy Policy</Link>
                             <Link className="hover:text-white transition-colors" href="#">Cookie Policy</Link>

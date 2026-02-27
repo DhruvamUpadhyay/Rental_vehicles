@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "HeavyRent | Premium Construction Equipment Rental",
+  title: "Prime Construction Machines | Premium Construction Equipment Rental",
   description: "India's leading B2B marketplace for heavy construction machinery.",
 };
 

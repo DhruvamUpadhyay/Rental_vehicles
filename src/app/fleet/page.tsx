@@ -1,3 +1,6 @@
+"use client";
+import { useState, useMemo, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
     HardHat,
@@ -15,7 +18,7 @@ import {
     Info
 } from "lucide-react";
 
-export default function FleetCatalog() {
+function FleetCatalogContent() {
     const machines = [
         {
             id: "HR-8821",
@@ -24,6 +27,7 @@ export default function FleetCatalog() {
             location: "Andheri East, Mumbai",
             icon: <Settings2 className="h-4 w-4" />,
             tag: "Operator Included",
+            vendor: { id: "vnd-1", name: "InfraCorp Rentals", initial: "IC" },
             img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAs8wXUYe43sZipTPghbSWrcBg0jEAgbcII2Atl2u7XHrToO0iWu86QqPjjQ0cpcL_-akoTgMCpLsCxaJLKrfoyDcVvUP26VuFxgyfELCntVWujM9dthplT_FuPL8YSGkmenYNa-tT2S1QoHKNTmVLnCKxcnZ3o-xb9FLuof8pK2Fn3nMmeKv-7bwDNTbU52gpqt87krdY2lL28t82ATHMzz2OHCJTahn4YhUqyF_EPN8pqTX7p4NP2BvVHCwCLljN3FJdoVxWEt35H"
         },
         {
@@ -33,6 +37,7 @@ export default function FleetCatalog() {
             location: "Thane West, Mumbai",
             icon: <Settings className="h-4 w-4" />,
             tag: "Operator Included",
+            vendor: { id: "vnd-2", name: "Apex Heavy Machinery", initial: "AH" },
             img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA3oLmubSgTmQ8_P2CldNCrpcExKMaYrC99NUoj4JewNvbNTyTnNTpr2eHCQR7iuC1aY5zJuVmBZLhdDFQiI1FmgELQ7tT5JLc12C3Z6Fj8HpSdoo8kAZlMseuxpzO-S9EAb7DrWxkFxWOM_8BPI1Ee8xLVHEF6wb6x1BugveZzUpIxrqqMS4-AsiDFhX1v4dlrO2Vog5ushDgktMuQzEpsk8A-INfhQOalSv6ssIH7iTQ7oYc3sFKF-d9xg58ipouqTqXZ6fA0K2Ic"
         },
         {
@@ -42,6 +47,7 @@ export default function FleetCatalog() {
             location: "Navi Mumbai, MH",
             icon: <Maximize2 className="h-4 w-4" />,
             tag: "Expert Team",
+            vendor: { id: "vnd-3", name: "BuildTech Solvers", initial: "BT" },
             img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD1HS2EkzSWL65l6xzkudfKzrdoSCnh13lmmVmD7ihNiP_tB_Bqd-dUC2PCHoVNOatOJFHAAvstrxLaupowG0tg0ipz-H0BvRhX0A6o2EcB6Eg8hvPIWHHVj_XFq2ZpsplpGvETD9kHBZ169eh38uF7PhfLbkHsZAIffEWYExsL4q-uS54PoyWHSwooJdHavxCTz7hfVbpxzYlJPGOs_myD9_dtjDsbRlReTraZn8qB9PS2zFDrLNlnrXEeIcu5CDjKPAQDteTCfdgg"
         },
         {
@@ -51,9 +57,33 @@ export default function FleetCatalog() {
             location: "Bandra Kurla Complex",
             icon: <Home className="h-4 w-4" />,
             tag: "Operator Included",
+            vendor: { id: "vnd-1", name: "InfraCorp Rentals", initial: "IC" },
             img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCybyXmvsj10PZapTRCj3YFApveQeSO_xuxpwpNlNGbcSYT9MUL5W6wxV8PhvXqTXQ9Vwd0cYWWeVv8RXiDzlPlbU7FuvuUZ3WN6O6c9RnkxeYtMyeZ6jeGzLDuakWwsh7YVJPwKcmQYXiggr2LRiLwGXD6eCgF6xqirlst4TgZ5guJZbfglqnHWiSSG1yu9ng4oxVfUDqEgePnKac5hXC8LmYmKU4AiYTE6I8RJ11IQPpZ-Z9kJaWaiukGBTImoxpc2n7HBgQGwYZE"
         }
     ];
+
+    const searchParams = useSearchParams();
+
+    const [searchQuery, setSearchQuery] = useState(searchParams?.get("q") || "");
+    const [pincodeQuery, setPincodeQuery] = useState(searchParams?.get("loc") || "");
+    const [categoryQuery, setCategoryQuery] = useState("All Equipment");
+
+    const filteredMachines = useMemo(() => {
+        return machines.filter((machine) => {
+            const matchesSearch = machine.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                machine.vendor.name.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesPincode = machine.location.toLowerCase().includes(pincodeQuery.toLowerCase());
+
+            let matchesCategory = true;
+            if (categoryQuery !== "All Equipment") {
+                if (categoryQuery === "JCB Backhoe Loaders" && !machine.name.includes("JCB")) matchesCategory = false;
+                if (categoryQuery === "Excavators" && !machine.name.includes("Excavator")) matchesCategory = false;
+                if (categoryQuery === "Cranes" && !machine.name.includes("Crane")) matchesCategory = false;
+            }
+
+            return matchesSearch && matchesPincode && matchesCategory;
+        });
+    }, [searchQuery, pincodeQuery, categoryQuery, machines]);
 
     return (
         <div className="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased min-h-screen">
@@ -65,7 +95,7 @@ export default function FleetCatalog() {
                             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white">
                                 <HardHat className="h-6 w-6" />
                             </div>
-                            <span className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white uppercase">Heavy<span className="text-primary">Rent</span></span>
+                            <span className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white uppercase">Prime Construction <span className="text-primary">Machines</span></span>
                         </Link>
                         <nav className="hidden md:flex items-center gap-8">
                             <Link className="text-sm font-semibold hover:text-primary transition-colors" href="/">Home</Link>
@@ -101,22 +131,44 @@ export default function FleetCatalog() {
                     </p>
                 </div>
 
-                {/* Filter Bar */}
                 <section className="mb-12 p-6 bg-white dark:bg-slate-900/50 rounded-2xl shadow-sm border border-slate-200 dark:border-primary/10">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+                        <div className="space-y-2 col-span-1 md:col-span-2">
+                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                <Search className="text-primary h-4 w-4" />
+                                Search Equipment or Vendor
+                            </label>
+                            <input
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary transition-all outline-none"
+                                placeholder="e.g. 'JCB' or 'Apex Machinery'"
+                                type="text"
+                            />
+                        </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                                 <MapPin className="text-primary h-4 w-4" />
-                                Service Location
+                                Location
                             </label>
-                            <input className="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary transition-all outline-none" placeholder="Enter Pincode (e.g. 400001)" type="text" />
+                            <input
+                                value={pincodeQuery}
+                                onChange={(e) => setPincodeQuery(e.target.value)}
+                                className="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary transition-all outline-none"
+                                placeholder="Service Pincode"
+                                type="text"
+                            />
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                                 <Box className="text-primary h-4 w-4" />
-                                Equipment Category
+                                Category
                             </label>
-                            <select className="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary transition-all outline-none text-slate-600 dark:text-slate-300">
+                            <select
+                                value={categoryQuery}
+                                onChange={(e) => setCategoryQuery(e.target.value)}
+                                className="w-full h-11 px-4 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl focus:ring-primary focus:border-primary transition-all outline-none text-slate-600 dark:text-slate-300"
+                            >
                                 <option>All Equipment</option>
                                 <option>JCB Backhoe Loaders</option>
                                 <option>Excavators</option>
@@ -125,18 +177,25 @@ export default function FleetCatalog() {
                                 <option>Compactors</option>
                             </select>
                         </div>
-                        <button className="h-11 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2">
-                            <Search className="h-4 w-4" />
-                            Find Available Fleet
-                        </button>
                     </div>
                 </section>
 
                 {/* Equipment Grid */}
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-                    {machines.map((machine, idx) => (
-                        <div key={idx} className="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl cursor-pointer">
-                            <Link href={`/equipment/${machine.id}`}>
+                    {filteredMachines.map((machine, idx) => (
+                        <div key={idx} className="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl flex flex-col">
+                            {/* Vendor Profile Header */}
+                            <Link href={`/vendor/${machine.vendor.id}`} className="flex items-center gap-3 p-4 border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors z-10">
+                                <div className="h-8 w-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-black text-xs shrink-0">
+                                    {machine.vendor.initial}
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-xs font-bold text-slate-900 dark:text-white leading-none mb-1">{machine.vendor.name}</p>
+                                    <p className="text-[10px] text-slate-500 uppercase tracking-widest leading-none">Verified Partner</p>
+                                </div>
+                            </Link>
+
+                            <Link href={`/equipment/${machine.id}`} className="flex-1 flex flex-col cursor-pointer">
                                 <div className="relative h-48 overflow-hidden">
                                     <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt={machine.name} src={machine.img} />
                                     <div className="absolute top-3 left-3 flex flex-wrap gap-2">
@@ -238,7 +297,7 @@ export default function FleetCatalog() {
                             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
                                 <HardHat className="h-4 w-4" />
                             </div>
-                            <span className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white uppercase">Heavy<span className="text-primary">Rent</span></span>
+                            <span className="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white uppercase">Prime Construction <span className="text-primary">Machines</span></span>
                         </div>
                         <div className="flex gap-8 text-sm font-medium text-slate-500">
                             <a className="hover:text-primary" href="#">Privacy Policy</a>
@@ -246,11 +305,19 @@ export default function FleetCatalog() {
                             <a className="hover:text-primary" href="#">Help Center</a>
                         </div>
                         <p className="text-sm text-slate-500">
-                            &copy; 2024 HeavyRent Industrial Services. All rights reserved.
+                            &copy; 2024 Prime Construction Machines. All rights reserved.
                         </p>
                     </div>
                 </div>
             </footer>
         </div>
+    );
+}
+
+export default function FleetCatalog() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">Loading catalog...</div>}>
+            <FleetCatalogContent />
+        </Suspense>
     );
 }

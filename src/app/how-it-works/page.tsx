@@ -10,7 +10,7 @@ export default function HowItWorks() {
                     <div className="text-primary">
                         <HardHat className="text-4xl h-10 w-10" />
                     </div>
-                    <h2 className="text-slate-900 dark:text-white text-xl font-black leading-tight tracking-tight uppercase italic">HeavyRent</h2>
+                    <h2 className="text-slate-900 dark:text-white text-xl font-black leading-tight tracking-tight uppercase italic">Prime Construction <span className="text-primary">Machines</span></h2>
                 </Link>
                 <div className="flex flex-1 justify-end gap-8 items-center">
                     <nav className="hidden md:flex items-center gap-9">
@@ -165,7 +165,7 @@ export default function HowItWorks() {
 
             {/* Small Footer */}
             <footer className="border-t border-slate-200 dark:border-slate-800 py-8 px-6 text-center text-slate-500 dark:text-slate-500 text-sm font-semibold uppercase tracking-widest mt-auto">
-                <p>&copy; 2024 HeavyRent Industrial Solutions. All rights reserved. Safety First.</p>
+                <p>&copy; 2024 Prime Construction Machines. All rights reserved. Safety First.</p>
             </footer>
         </div>
     );

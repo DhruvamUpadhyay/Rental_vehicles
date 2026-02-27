@@ -181,7 +181,7 @@ export default function EquipmentDetail({ params }: { params: { id: string } }) 
                             <div className="flex gap-3 items-start">
                                 <Shield className="text-primary h-6 w-6 shrink-0 mt-0.5" />
                                 <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                                    All inquiries are managed directly by <span className="text-slate-900 dark:text-white font-bold">HeavyRent Admin</span> for guaranteed service & transparent pricing.
+                                    All inquiries are managed directly by <span className="text-slate-900 dark:text-white font-bold">Prime Construction Admin</span> for guaranteed service & transparent pricing.
                                 </p>
                             </div>
                         </div>
@@ -277,7 +277,7 @@ export default function EquipmentDetail({ params }: { params: { id: string } }) 
                     <div className="flex flex-col md:flex-row justify-between items-center gap-8 border-b border-white/10 pb-8 mb-8">
                         <div className="flex items-center gap-3">
                             <HardHat className="text-primary h-8 w-8" />
-                            <span className="text-xl font-black tracking-tighter text-white uppercase italic">HEAVY<span className="text-primary">RENT</span></span>
+                            <span className="text-xl font-black tracking-tighter text-white uppercase italic">PRIME CONSTRUCTION <span className="text-primary">MACHINES</span></span>
                         </div>
                         <div className="flex gap-8 text-sm font-bold uppercase tracking-widest">
                             <Link className="hover:text-primary transition-colors" href="#">Privacy Policy</Link>
@@ -285,7 +285,7 @@ export default function EquipmentDetail({ params }: { params: { id: string } }) 
                             <Link className="hover:text-primary transition-colors" href="#">Support</Link>
                         </div>
                     </div>
-                    <p className="text-xs font-bold text-center uppercase tracking-widest">&copy; 2024 HeavyRent Industrial Solutions. All rights reserved.</p>
+                    <p className="text-xs font-bold text-center uppercase tracking-widest">&copy; 2024 Prime Construction Machines. All rights reserved.</p>
                 </div>
             </footer>
         </div>
