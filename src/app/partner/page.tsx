@@ -1,7 +1,91 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
-import { HardHat, TrendingUp, ShieldCheck, CreditCard, Building2, Factory, Wrench, Mail, Phone, Menu } from "lucide-react";
+import { HardHat, TrendingUp, ShieldCheck, CreditCard, Building2, Factory, Wrench, Mail, Phone, Menu, CheckCircle, AlertCircle } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function PartnerProgram() {
+    const [formData, setFormData] = useState({
+        companyName: "",
+        fullName: "",
+        yearsInBusiness: "",
+        gst: "",
+        pan: "",
+        mobile: "",
+        email: "",
+        fleetSize: "",
+        machineTypes: "",
+        regions: "",
+        pincode: ""
+    });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState("");
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setError("");
+
+        try {
+            // We are using 'companyName' for both company and contact fields just for the sake of simplicity 
+            // since the form doesn't separate them out yet based on the mockup.
+            const { error: insertError } = await supabase
+                .from('vendors')
+                .insert([
+                    {
+                        company_name: formData.companyName,
+                        full_name: formData.fullName,
+                        email: formData.email,
+                        mobile_number: formData.mobile,
+                        equipment_types: formData.machineTypes,
+                        fleet_size: formData.fleetSize,
+                        pincode: formData.pincode,
+                        years_in_business: formData.yearsInBusiness,
+                        status: 'pending'
+                    }
+                ]);
+
+            if (insertError) {
+                console.error("Supabase Insert Error:", insertError);
+                // Handle specific constraint errors (like duplicate emails/phones)
+                if (insertError.code === '23505') {
+                    throw new Error("An application with this email or mobile number already exists.");
+                }
+                throw new Error("Failed to submit application. Please try again.");
+            }
+
+            setSuccess(true);
+        } catch (err: any) {
+            setError(err.message || "An unexpected error occurred.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    if (success) {
+        return (
+            <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col items-center justify-center p-6">
+                <div className="max-w-md w-full bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 text-center flex flex-col items-center">
+                    <div className="w-20 h-20 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mb-6">
+                        <CheckCircle className="w-10 h-10" />
+                    </div>
+                    <h2 className="text-2xl font-black uppercase tracking-tight mb-4">Application Received!</h2>
+                    <p className="text-slate-500 mb-8 font-medium">
+                        Thank you for applying to be a Prime Construction Partner. Our admin team will review your fleet details and contact you at <span className="font-bold text-slate-700 dark:text-slate-300">{formData.email}</span> shortly.
+                    </p>
+                    <Link href="/" className="w-full bg-primary hover:bg-orange-600 text-white font-black py-4 rounded-xl flex items-center justify-center transition-transform active:scale-[0.98] shadow-lg uppercase tracking-widest text-sm">
+                        Return to Homepage
+                    </Link>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col">
             {/* Navigation */}
@@ -49,26 +133,40 @@ export default function PartnerProgram() {
                     {/* Registration Form */}
                     <div className="lg:col-span-7 bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
                         <h3 className="text-2xl font-black uppercase tracking-tight mb-8">Application Details</h3>
-                        <form className="space-y-6">
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {error && (
+                                <div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-4 rounded-xl text-sm font-bold flex items-center gap-2 mb-6">
+                                    <AlertCircle className="h-5 w-5 shrink-0" />
+                                    {error}
+                                </div>
+                            )}
                             {/* Section 1: Company Details */}
                             <div className="space-y-6">
-                                <h4 className="text-lg font-bold border-b border-slate-200 dark:border-slate-800 pb-2 uppercase text-primary">1. Company Details</h4>
+                                <h4 className="text-lg font-bold border-b border-slate-200 dark:border-slate-800 pb-2 uppercase text-primary">1. Company & Contact Details</h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-semibold">Legal Entity Name</label>
-                                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="Registered company name" type="text" />
+                                        <label className="text-sm font-semibold">Legal Entity / Company Name</label>
+                                        <input name="companyName" value={formData.companyName} onChange={handleChange} required className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="Registered company name" type="text" />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-sm font-semibold">Contact Person Name</label>
+                                        <input name="fullName" value={formData.fullName} onChange={handleChange} required className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="Your full name" type="text" />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-sm font-semibold">Mobile Number (10 digits)</label>
+                                        <input name="mobile" value={formData.mobile} onChange={handleChange} className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="9876543210" type="tel" maxLength={10} required />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-sm font-semibold">Email Address</label>
+                                        <input name="email" value={formData.email} onChange={handleChange} className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="vendor@company.com" type="email" required />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-sm font-semibold">Years in Business</label>
+                                        <input name="yearsInBusiness" value={formData.yearsInBusiness} onChange={handleChange} className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="e.g. 5" type="number" min="0" required />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <label className="text-sm font-semibold">GST Number (Optional)</label>
-                                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="22AAAAA0000A1Z5" type="text" />
-                                    </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-semibold">PAN Number</label>
-                                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="ABCDE1234F" type="text" />
-                                    </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-semibold">Mobile Number</label>
-                                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="+91 98765 43210" type="tel" />
+                                        <input name="gst" value={formData.gst} onChange={handleChange} className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="22AAAAA0000A1Z5" type="text" />
                                     </div>
                                 </div>
                             </div>
@@ -79,17 +177,17 @@ export default function PartnerProgram() {
                                 <div className="grid grid-cols-1 gap-6">
                                     <div className="flex flex-col gap-2">
                                         <label className="text-sm font-semibold">Total Fleet Size</label>
-                                        <select className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3">
-                                            <option>Select fleet size</option>
-                                            <option>1-5 Machines</option>
-                                            <option>6-15 Machines</option>
-                                            <option>16-50 Machines</option>
-                                            <option>50+ Machines</option>
+                                        <select name="fleetSize" value={formData.fleetSize} onChange={handleChange} required className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent dark:bg-slate-900 focus:ring-primary focus:border-primary p-3">
+                                            <option value="" className="bg-white dark:bg-slate-900" disabled>Select fleet size</option>
+                                            <option value="1-5 Machines" className="bg-white dark:bg-slate-900">1-5 Machines</option>
+                                            <option value="6-15 Machines" className="bg-white dark:bg-slate-900">6-15 Machines</option>
+                                            <option value="16-50 Machines" className="bg-white dark:bg-slate-900">16-50 Machines</option>
+                                            <option value="50+ Machines" className="bg-white dark:bg-slate-900">50+ Machines</option>
                                         </select>
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <label className="text-sm font-semibold">Types of Machines Owned</label>
-                                        <textarea className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="e.g. Excavators, JCBs, Cranes, Forklifts..." rows={3}></textarea>
+                                        <textarea name="machineTypes" value={formData.machineTypes} onChange={handleChange} required className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="e.g. Excavators, JCBs, Cranes, Forklifts..." rows={3}></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -97,27 +195,14 @@ export default function PartnerProgram() {
                             {/* Section 3: Operating Regions */}
                             <div className="space-y-6 pt-6">
                                 <h4 className="text-lg font-bold border-b border-slate-200 dark:border-slate-800 pb-2 uppercase text-primary">3. Operating Regions</h4>
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm font-semibold">States/Cities Covered</label>
-                                    <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="e.g. Maharashtra, Karnataka (Bangalore, Mysore)" type="text" />
-                                </div>
-                            </div>
-
-                            {/* Section 4: Bank Details */}
-                            <div className="space-y-6 pt-6">
-                                <h4 className="text-lg font-bold border-b border-slate-200 dark:border-slate-800 pb-2 uppercase text-primary">4. Bank Details (for commissions)</h4>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                                    <div className="flex flex-col gap-2 md:col-span-2">
-                                        <label className="text-sm font-semibold">Bank Name</label>
-                                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="Enter bank name" type="text" />
+                                    <div className="flex flex-col gap-2 md:col-span-1">
+                                        <label className="text-sm font-semibold">States/Cities Covered</label>
+                                        <input name="regions" value={formData.regions} onChange={handleChange} required className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="e.g. Maharashtra, Karnataka (Bangalore, Mysore)" type="text" />
                                     </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-semibold">Account Number</label>
-                                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="000000000000" type="password" />
-                                    </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-semibold">IFSC Code</label>
-                                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="HDFC0000123" type="text" />
+                                    <div className="flex flex-col gap-2 md:col-span-1">
+                                        <label className="text-sm font-semibold">Base Pincode</label>
+                                        <input name="pincode" value={formData.pincode} onChange={handleChange} required className="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary p-3" placeholder="e.g. 400001" type="text" />
                                     </div>
                                 </div>
                             </div>
@@ -125,8 +210,8 @@ export default function PartnerProgram() {
                             {/* Form Actions */}
                             <div className="pt-10 space-y-4">
                                 <div className="flex flex-col sm:flex-row gap-4">
-                                    <button className="flex-1 bg-primary hover:bg-orange-600 text-white font-black uppercase italic py-4 rounded-xl shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]" type="submit">
-                                        Submit Application to Admin
+                                    <button disabled={isSubmitting} className="flex-1 bg-primary hover:bg-orange-600 disabled:opacity-70 disabled:hover:scale-100 disabled:hover:bg-primary text-white font-black uppercase italic py-4 rounded-xl shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]" type="submit">
+                                        {isSubmitting ? "Submitting..." : "Submit Application to Admin"}
                                     </button>
                                     <button className="flex-1 border-2 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold uppercase tracking-wider py-4 rounded-xl transition-all" type="button">
                                         Save Progress
@@ -202,9 +287,9 @@ export default function PartnerProgram() {
                                 <Mail className="h-5 w-5" />
                                 partners@primeconstruction.com
                             </Link>
-                            <Link className="flex items-center justify-center gap-3 px-8 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:border-primary hover:text-primary transition-colors shadow-sm" href="#">
+                            <Link className="flex items-center justify-center gap-3 px-8 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:border-primary hover:text-primary transition-colors shadow-sm" href="tel:+919057221351">
                                 <Phone className="h-5 w-5" />
-                                +1 (800) HEAVY-RENT
+                                +91 90572 21351
                             </Link>
                         </div>
                     </div>

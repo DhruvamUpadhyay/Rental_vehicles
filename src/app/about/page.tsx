@@ -217,8 +217,8 @@ export default function About() {
                             <h2 className="text-3xl md:text-5xl font-black text-white mb-6 uppercase italic tracking-tight">Ready to Scale Your <span className="text-primary">Operations</span>?</h2>
                             <p className="text-slate-400 text-lg mb-10 font-medium">Experience the Prime Construction Machines difference with our 30-minute response commitment and enterprise-grade fleet.</p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                <button className="bg-primary hover:bg-orange-600 text-white px-10 py-5 rounded-xl font-black uppercase tracking-widest transition-all shadow-xl shadow-primary/20 hover:-translate-y-1">Start Your Quote</button>
-                                <button className="bg-white/5 border border-white/20 hover:bg-white/10 text-white px-10 py-5 rounded-xl font-black uppercase tracking-widest transition-all hover:-translate-y-1">Contact Logistics</button>
+                                <Link href="/post-requirement" className="bg-primary hover:bg-orange-600 text-white px-10 py-5 rounded-xl font-black uppercase tracking-widest transition-all shadow-xl shadow-primary/20 hover:-translate-y-1 flex items-center justify-center">Start Your Quote</Link>
+                                <Link href="tel:+919057221351" className="bg-white/5 border border-white/20 hover:bg-white/10 text-white px-10 py-5 rounded-xl font-black uppercase tracking-widest transition-all hover:-translate-y-1 flex items-center justify-center">+91 90572 21351</Link>
                             </div>
                         </div>
                     </div>

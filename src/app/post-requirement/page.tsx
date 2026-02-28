@@ -1,19 +1,101 @@
+"use client";
+import { useState, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
     HardHat,
     Search,
     Bell,
     User,
     ClipboardList,
-    Send,
     MapPin,
     Phone,
-    User as UserIcon,
     Building2,
-    Menu
+    Send,
+    ChevronRight,
+    Mail,
+    Share2,
+    CheckCircle,
+    Wrench,
+    User as UserIcon,
+    Menu,
+    AlertCircle
 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
-export default function PostRequirement() {
+function PostRequirementContent() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    const machineId = searchParams?.get("machine");
+    const machineName = searchParams?.get("name");
+
+    const [formData, setFormData] = useState({
+        fullName: "",
+        mobileNumber: "",
+        pincode: "",
+        requirementDetails: ""
+    });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [error, setError] = useState("");
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setError("");
+
+        try {
+            const { error: insertError } = await supabase
+                .from('leads')
+                .insert([
+                    {
+                        customer_name: formData.fullName,
+                        customer_phone: formData.mobileNumber,
+                        requirement_details: formData.requirementDetails,
+                        location_pincode: formData.pincode,
+                        machine_id: machineId || null,
+                        status: 'new'
+                    }
+                ]);
+
+            if (insertError) throw insertError;
+
+            setIsSuccess(true);
+
+            // Redirect back home after a short delay
+            setTimeout(() => {
+                router.push('/');
+            }, 3000);
+
+        } catch (err: any) {
+            console.error("Error submitting lead:", err);
+            setError("Failed to submit requirement. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    if (isSuccess) {
+        return (
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl overflow-hidden border border-slate-200 dark:border-slate-800 p-12 text-center flex flex-col items-center justify-center space-y-4">
+                <div className="size-20 bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-500 rounded-full flex items-center justify-center mb-4">
+                    <CheckCircle className="size-10" />
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white">Requirement Posted!</h3>
+                <p className="text-slate-500 dark:text-slate-400 font-medium max-w-sm">
+                    Our admin team is now reviewing your request and matching you with verified local vendors. You will be contacted shortly.
+                </p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-8">Redirecting to home...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col">
             {/* Top Navigation */}
@@ -38,17 +120,17 @@ export default function PostRequirement() {
                         {/* Search & Actions */}
                         <div className="flex items-center gap-4">
                             <div className="relative hidden sm:block">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
+                                {/* <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" /> */}
                                 <input className="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-primary outline-none" placeholder="Search equipment..." type="text" />
                             </div>
                             <button className="p-2 rounded-lg text-slate-500 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden sm:block">
-                                <Bell className="h-5 w-5" />
+                                {/* <Bell className="h-5 w-5" /> */}
                             </button>
                             <Link href="/partner" className="hidden sm:flex items-center justify-center rounded-lg h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold uppercase tracking-wider transition-colors border border-slate-200 dark:border-slate-700">
                                 List Your Fleet
                             </Link>
                             <div className="md:hidden">
-                                <Menu className="text-3xl h-8 w-8 text-slate-900 dark:text-white" />
+                                {/* <Menu className="text-3xl h-8 w-8 text-slate-900 dark:text-white" /> */}
                             </div>
                         </div>
                     </div>
@@ -61,7 +143,7 @@ export default function PostRequirement() {
 
                     <div className="flex items-center gap-4 mb-8">
                         <div className="bg-primary/10 p-3 rounded-xl border border-primary/20">
-                            <ClipboardList className="h-8 w-8 text-primary" />
+                            {/* <ClipboardList className="h-8 w-8 text-primary" /> */}
                         </div>
                         <div>
                             <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase italic tracking-tight">Tell us what you need</h1>
@@ -69,22 +151,39 @@ export default function PostRequirement() {
                         </div>
                     </div>
 
-                    <form action="#" className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {error && (
+                            <div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-4 rounded-xl text-sm font-bold flex items-center gap-2 mb-6">
+                                <AlertCircle className="h-5 w-5 shrink-0" />
+                                {error}
+                            </div>
+                        )}
+                        {/* Selected Machine Context */}
+                        {machineId && machineName && (
+                            <div className="bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-xl p-4 flex items-center gap-4 mb-2">
+                                <Wrench className="h-6 w-6 text-primary shrink-0" />
+                                <div>
+                                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Requesting Equipment</p>
+                                    <p className="text-lg font-black text-slate-900 dark:text-white leading-tight">{decodeURIComponent(machineName)} <span className="text-primary text-sm italic">#{machineId}</span></p>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Name Input */}
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest" htmlFor="full_name">Full Name</label>
+                            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest" htmlFor="fullName">Full Name</label>
                             <div className="relative">
                                 <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
-                                <input className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-primary focus:border-primary pl-10 py-3 outline-none transition-colors" id="full_name" name="full_name" placeholder="Enter your full name" type="text" />
+                                <input required value={formData.fullName} onChange={handleChange} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-primary focus:border-primary pl-10 py-3 outline-none transition-colors" id="fullName" name="fullName" placeholder="Enter your full name" type="text" />
                             </div>
                         </div>
 
                         {/* Mobile Number */}
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest" htmlFor="mobile_number">Mobile Number</label>
+                            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest" htmlFor="mobileNumber">Mobile Number</label>
                             <div className="relative">
                                 <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
-                                <input className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-primary focus:border-primary pl-10 py-3 outline-none transition-colors" id="mobile_number" name="mobile_number" placeholder="+91 00000 00000" type="tel" />
+                                <input required value={formData.mobileNumber} onChange={handleChange} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-primary focus:border-primary pl-10 py-3 outline-none transition-colors" id="mobileNumber" name="mobileNumber" placeholder="+91 00000 00000" type="tel" />
                             </div>
                         </div>
 
@@ -93,24 +192,26 @@ export default function PostRequirement() {
                             <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest" htmlFor="pincode">Project Pincode / Location</label>
                             <div className="relative">
                                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
-                                <input className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-primary focus:border-primary pl-10 py-3 outline-none transition-colors" id="pincode" name="pincode" placeholder="e.g. 400001 or Mumbai" type="text" />
+                                <input required value={formData.pincode} onChange={handleChange} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-primary focus:border-primary pl-10 py-3 outline-none transition-colors" id="pincode" name="pincode" placeholder="e.g. 400001 or Mumbai" type="text" />
                             </div>
                         </div>
 
                         {/* Requirement Details */}
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest" htmlFor="details">Requirement Details</label>
-                            <div className="relative">
-                                <Building2 className="absolute left-3 top-3 text-slate-400 h-5 w-5" />
-                                <textarea className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-primary focus:border-primary pl-10 pt-3 min-h-[120px] outline-none transition-colors" id="details" name="details" placeholder="e.g., I need a 50-ton crane for 3 days starting Monday for a construction project." rows={5}></textarea>
-                            </div>
+                            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest" htmlFor="requirementDetails">Requirement Details</label>
+                            <textarea required value={formData.requirementDetails} onChange={handleChange} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-primary focus:border-primary p-4 outline-none transition-colors resize-none" id="requirementDetails" name="requirementDetails" placeholder="Please describe exactly what you need, including timelines and any specific configurations..." rows={4}></textarea>
                         </div>
 
                         {/* Submit Button */}
-                        <button className="w-full bg-primary text-white py-4 rounded-xl font-black text-lg shadow-lg hover:bg-orange-600 active:scale-[0.98] transition-all flex justify-center items-center gap-3 uppercase tracking-widest mt-8" type="button">
-                            Submit to Admin
-                            <Send className="h-5 w-5" />
-                        </button>
+                        <div className="pt-4">
+                            <button disabled={isSubmitting} type="submit" className="w-full bg-primary hover:bg-orange-600 disabled:opacity-70 disabled:hover:scale-100 disabled:hover:bg-primary text-white rounded-xl h-14 font-black text-sm uppercase tracking-wider transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                                {isSubmitting ? "Submitting..." : (
+                                    <>
+                                        Submit Requirements <Send className="h-5 w-5" />
+                                    </>
+                                )}
+                            </button>
+                        </div>
                         <p className="text-[10px] text-center text-slate-400 mt-4 font-bold uppercase tracking-widest">Our admin team will match you with a verified local vendor within 30 minutes.</p>
                     </form>
                 </div>
@@ -122,7 +223,7 @@ export default function PostRequirement() {
                     <div className="flex flex-col md:flex-row justify-between items-center gap-8 border-b border-white/10 pb-8 mb-8">
                         <div className="flex items-center gap-3">
                             <HardHat className="text-primary h-8 w-8" />
-                            <span className="text-xl font-black tracking-tighter text-white uppercase italic">HEAVY<span className="text-primary">RENT</span></span>
+                            <span className="text-xl font-black tracking-tighter text-white uppercase italic">PRIME CONSTRUCTION <span className="text-primary">MACHINES</span></span>
                         </div>
                         <div className="flex gap-8 text-sm font-bold uppercase tracking-widest">
                             <Link className="hover:text-primary transition-colors" href="#">Privacy Policy</Link>
@@ -130,9 +231,17 @@ export default function PostRequirement() {
                             <Link className="hover:text-primary transition-colors" href="#">Support</Link>
                         </div>
                     </div>
-                    <p className="text-xs font-bold text-center uppercase tracking-widest">&copy; 2024 HeavyRent Industrial Solutions. All rights reserved.</p>
+                    <p className="text-xs font-bold text-center uppercase tracking-widest">&copy; 2024 Prime Construction Machines. All rights reserved.</p>
                 </div>
             </footer>
         </div>
+    );
+}
+
+export default function PostRequirement() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+            <PostRequirementContent />
+        </Suspense>
     );
 }

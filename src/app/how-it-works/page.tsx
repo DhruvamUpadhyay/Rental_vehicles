@@ -155,10 +155,10 @@ export default function HowItWorks() {
                             <h2 className="text-3xl md:text-4xl font-black uppercase italic tracking-tight mb-2">Ready to move earth?</h2>
                             <p className="text-white/80 text-lg font-medium">Get in touch with an administrator today to start renting or listing.</p>
                         </div>
-                        <button className="flex items-center gap-2 px-10 py-5 bg-white text-slate-900 rounded-xl font-black uppercase italic text-lg shadow-xl hover:scale-105 transition-transform">
+                        <Link href="tel:+919057221351" className="flex items-center gap-2 px-10 py-5 bg-white text-slate-900 rounded-xl font-black uppercase italic text-lg shadow-xl hover:scale-105 transition-transform">
                             <Headset className="h-6 w-6" />
-                            Contact Admin
-                        </button>
+                            +91 90572 21351
+                        </Link>
                     </div>
                 </section>
             </main>

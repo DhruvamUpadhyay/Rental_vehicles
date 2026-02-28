@@ -24,7 +24,7 @@ import {
 
 export default function EquipmentDetail({ params }: { params: { id: string } }) {
     // In a real app we'd fetch data using the ID
-    // const id = params.id;
+    const machine = { id: params.id, name: "JCB 3DX Eco Super" };
 
     return (
         <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col">
@@ -188,14 +188,22 @@ export default function EquipmentDetail({ params }: { params: { id: string } }) 
 
                         {/* Action Zone */}
                         <div className="flex flex-col gap-3 mt-4">
-                            <button className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-black py-4 rounded-xl flex items-center justify-center gap-3 transition-transform active:scale-[0.98] shadow-lg shadow-green-600/20 uppercase tracking-widest text-sm">
+                            <a
+                                href={`https://wa.me/919057221351?text=${encodeURIComponent(`Hi, I am interested in renting the equipment: ${machine.name} (ID: ${machine.id}). Please provide more details.`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-black py-4 rounded-xl flex items-center justify-center gap-3 transition-transform active:scale-[0.98] shadow-lg shadow-green-600/20 uppercase tracking-widest text-sm"
+                            >
                                 <MessageSquare className="h-5 w-5 fill-current" />
                                 Check Availability via WhatsApp
-                            </button>
-                            <button className="w-full bg-primary hover:bg-orange-600 text-white font-black py-4 rounded-xl flex items-center justify-center gap-3 transition-transform active:scale-[0.98] shadow-lg shadow-primary/20 uppercase tracking-widest text-sm">
-                                <Phone className="h-5 w-5 fill-current" />
-                                Call Admin for Location
-                            </button>
+                            </a>
+                            <Link
+                                href={`/post-requirement?machine=${machine.id}&name=${encodeURIComponent(machine.name)}`}
+                                className="w-full bg-primary hover:bg-orange-600 text-white font-black py-4 rounded-xl flex items-center justify-center gap-3 transition-transform active:scale-[0.98] shadow-lg shadow-primary/20 uppercase tracking-widest text-sm"
+                            >
+                                <HardHat className="h-5 w-5 fill-current" />
+                                Request to Rent
+                            </Link>
                         </div>
 
                         <div className="flex justify-between items-center py-4 border-t border-slate-200 dark:border-slate-800 mt-2">

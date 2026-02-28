@@ -72,9 +72,12 @@ export default function Home() {
           </video>
         </div>
         <div className="relative z-20 container mx-auto px-4 flex flex-col items-center text-center">
-          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.2] md:leading-[1.1] tracking-tighter mb-4 max-w-4xl uppercase italic">
-            Rent Heavy Construction <span className="text-primary">Equipment</span> Instantly
+          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.2] md:leading-[1.1] tracking-tighter mb-3 max-w-4xl uppercase italic">
+            Prime Construction <span className="text-primary">Machines</span>
           </h1>
+          <p className="text-white/90 text-lg sm:text-xl md:text-2xl font-black uppercase italic tracking-tight mb-2">
+            Rent Heavy Construction Equipment Instantly
+          </p>
           <p className="text-white/80 text-sm md:text-lg font-medium mb-8 md:mb-10 max-w-2xl leading-relaxed">
             Find JCBs, Cranes, and Dumpers near your pin code. Verified machines.
           </p>
@@ -120,10 +123,10 @@ export default function Home() {
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-white/30 animate-bounce">
           <ChevronDown className="h-10 w-10" />
         </div>
-      </section>
+      </section >
 
       {/* Trust Bar */}
-      <div className="bg-slate-900 border-y border-white/10 py-8 relative z-30 shadow-2xl">
+      < div className="bg-slate-900 border-y border-white/10 py-8 relative z-30 shadow-2xl" >
         <div className="max-w-7xl mx-auto px-4 flex justify-center">
           <div className="flex items-center gap-6 bg-white/5 border border-white/10 py-4 px-8 rounded-2xl backdrop-blur-sm">
             <div className="bg-primary/20 p-3 rounded-xl border border-primary/30">
@@ -135,10 +138,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Categorized Fleet Section */}
-      <section className="py-24 bg-background-light dark:bg-background-dark">
+      < section className="py-24 bg-background-light dark:bg-background-dark" >
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-end justify-between mb-16 border-l-4 border-primary pl-6">
             <div>
@@ -171,10 +174,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Industries We Serve Section */}
-      <section className="py-24 bg-slate-900 text-white overflow-hidden">
+      < section className="py-24 bg-slate-900 text-white overflow-hidden" >
         <div className="max-w-7xl mx-auto px-4">
           <div className="mb-16 text-center">
             <h3 className="text-secondary font-bold uppercase tracking-widest text-sm mb-2">Our Expertise</h3>
@@ -201,7 +204,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Featured Listings */}
       < section className="py-24 bg-slate-100 dark:bg-white/[0.02]" >
@@ -329,10 +332,15 @@ export default function Home() {
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 font-medium">
                 The world&apos;s most trusted digital marketplace for high-end construction machinery and heavy equipment logistics.
               </p>
-              <div className="flex gap-4">
-                <Link className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-primary transition-colors" href="#"><Share2 className="h-5 w-5" /></Link>
-                <Link className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-primary transition-colors" href="#"><Mail className="h-5 w-5" /></Link>
-                <Link className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-primary transition-colors" href="#"><Phone className="h-5 w-5" /></Link>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <Link className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-primary transition-colors" href="mailto:contact@primeconstruction.com"><Mail className="h-5 w-5" /></Link>
+                  <span className="text-sm font-bold text-white/70">contact@primeconstruction.com</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Link className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center hover:bg-primary transition-colors" href="tel:+919057221351"><Phone className="h-5 w-5" /></Link>
+                  <span className="text-sm font-bold text-white">+91 90572 21351</span>
+                </div>
               </div>
             </div>
 
