@@ -378,6 +378,7 @@ export default function Home() {
             <div className="flex gap-8">
               <Link className="text-white/20 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest" href="#">Privacy Policy</Link>
               <Link className="text-white/20 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest" href="#">Terms of Service</Link>
+              <Link className="text-white/20 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest" href="/admin-login">Admin Portal</Link>
             </div>
           </div>
         </div>
